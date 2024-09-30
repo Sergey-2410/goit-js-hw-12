@@ -52,7 +52,11 @@ async function formSubmit(event) {
     }
     totalPages = Math.ceil(totalHits / PER_PAGE);
     renderGallery(hits, gallery);
-    loadMoreBtn.classList.remove('is-hidden');
+    if (hits.length < 15) {
+      loadMoreBtn.classList.add('is-hidden');
+    } else {
+      loadMoreBtn.classList.remove('is-hidden');
+    }
   } catch (error) {
     console.log(error.message);
     loadMoreBtn.classList.add('is-hidden');
@@ -70,7 +74,7 @@ async function loadMoreCard() {
     const { hits } = await fetchImages(searchquery, currentPage);
     renderGallery(hits, gallery);
     loadMoreScroll();
-    if (currentPage >= Math.min(totalPages, 3)) {
+    if (currentPage >= totalPages) {
       loadMoreBtn.classList.add('is-hidden');
       iziToast.info({
         message:
